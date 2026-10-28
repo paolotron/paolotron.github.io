@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en" data-theme="destijl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Paolo Rabino</title>
+<meta name="description" content="Paolo Rabino, Research Lead at mkind. 3D perception and robot learning for industrial robotics.">
+<meta property="og:title" content="Paolo Rabino">
+<meta property="og:description" content="Research Lead at mkind. 3D perception and robot learning for industrial robotics.">
+<meta property="og:image" content="https://paolotron.github.io/assets/img/paolo.jpg">
+<meta id="themeColor" name="theme-color" content="#fcfbf7">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<script>
+  // Apply the stored palette before first paint, as paperqueue does.
+  try { document.documentElement.dataset.theme = localStorage.getItem("site.theme") || "destijl"; } catch (e) {}
+</script>
+<style>
+  /* ============================================================ pigments ==
+     The paperqueue palettes. Themes rebind the --a-* aliases; everything
+     below reads the semantic names. */
+  :root {
+    --p-red:#d42a1e; --p-blue:#0a3ea8; --p-yellow:#f3c000; --p-ink:#111214; --p-paper:#fcfbf7;
+    --d-red:#f0574a; --d-blue:#5a86e8; --d-yellow:#f2cc4a; --d-ink:#f1efe8; --d-paper:#0e0f11; --d-panel:#17181b;
+    --g-paper:#faf8f2; --g-grid:#b9c7d6;
+    --n-ink:#101619; --n-paper:#e8e4d6; --n-panel:#efece1;
+    --n-d2: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4' shape-rendering='crispEdges'%3E%3Cpath fill='%23101619' d='M0,0h1v1H0zM2,2h1v1H2z'/%3E%3C/svg%3E");
+    --n-d4: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4' shape-rendering='crispEdges'%3E%3Cpath fill='%23101619' d='M0,0h1v1H0zM2,0h1v1H2zM0,2h1v1H0zM2,2h1v1H2z'/%3E%3C/svg%3E");
+    --n-d8: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4' shape-rendering='crispEdges'%3E%3Cpath fill='%23101619' d='M0,0h1v1H0zM2,0h1v1H2zM1,1h1v1H1zM3,1h1v1H3zM0,2h1v1H0zM2,2h1v1H2zM1,3h1v1H1zM3,3h1v1H3z'/%3E%3C/svg%3E");
+
+    --a-ground: var(--p-paper); --a-panel: var(--p-paper); --a-ink: var(--p-ink);
+    --a-red: var(--p-red); --a-blue: var(--p-blue); --a-yellow: var(--p-yellow);
+    --a-grid: transparent;
+  }
+
+  /* ========================================================== semantics == */
+  :root {
+    --ground: var(--a-ground);
+    --panel:  var(--a-panel);
+    --fg:     var(--a-ink);
+    --muted:  color-mix(in srgb, var(--a-ink) 55%, var(--a-ground));
+    --rule:   var(--a-ink);
+    --rule-w: 3px; --rule-heavy: 6px; --gutter: 8px;
+    --grid:   var(--a-grid); --grid-step: 22px;
+    --red: var(--a-red); --blue: var(--a-blue); --yellow: var(--a-yellow);
+    --on-fill: var(--a-ground);
+    --cursor-bg: var(--a-yellow); --cursor-fg: var(--p-ink);
+    --link: var(--a-blue); --key: var(--a-red);
+    --img-filter: none;
+    --sans: ui-sans-serif, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "Fira Code", "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+
+  /* ============================================================= themes == */
+  [data-theme="graph"] {
+    --a-ground: var(--g-paper); --a-panel: var(--g-paper); --a-grid: var(--g-grid);
+    --rule-w: 2px; --rule-heavy: 4px;
+  }
+  [data-theme="dinn"] {
+    --a-ground: var(--n-paper); --a-panel: var(--n-panel); --a-ink: var(--n-ink);
+    --a-red: var(--n-ink); --a-blue: var(--n-ink); --a-yellow: var(--n-ink);
+    --rule-w: 2px; --rule-heavy: 5px;
+    --muted: var(--a-ink);
+    --cursor-bg: var(--a-ink); --cursor-fg: var(--a-ground);
+    --img-filter: grayscale(1) contrast(1.35);
+  }
+  [data-theme="dark"] {
+    --a-ground: var(--d-paper); --a-panel: var(--d-panel); --a-ink: var(--d-ink);
+    --a-red: var(--d-red); --a-blue: var(--d-blue); --a-yellow: var(--d-yellow);
+    color-scheme: dark;
+  }
+  [data-theme="system"] { color-scheme: light dark; }
+  @media (prefers-color-scheme: dark) {
+    [data-theme="system"] {
+      --a-ground: var(--d-paper); --a-panel: var(--d-panel); --a-ink: var(--d-ink);
+      --a-red: var(--d-red); --a-blue: var(--d-blue); --a-yellow: var(--d-yellow);
+      color-scheme: dark;
+    }
+  }
+
+  /* ============================================================== frame == */
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--ground); color: var(--fg);
+    font: 16px/1.55 var(--sans);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: var(--grid-step) var(--grid-step);
+    padding-bottom: 64px;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+  /* one ink only: links need a line to read as links */
+  [data-theme="dinn"] main p a, [data-theme="dinn"] .org a, [data-theme="dinn"] .card h3 a { text-decoration: underline; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+
+  /* wordmark bar */
+  #header {
+    position: sticky; top: 0; z-index: 10; background: var(--ground);
+    border-bottom: var(--rule-heavy) solid var(--rule);
+  }
+  #header .wrap { display: flex; align-items: baseline; gap: 8px; padding-top: 9px; padding-bottom: 9px; white-space: nowrap; overflow: hidden; }
+  #header .mark { width: 13px; height: 13px; background: var(--red); flex: none; align-self: center; }
+  #header b { font-size: 17px; letter-spacing: .02em; }
+  #header .sub { color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; }
+
+  /* statusbar of keys, the paperqueue footer */
+  #footer {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    background: var(--ground); border-top: var(--rule-heavy) solid var(--rule);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  #footer .wrap { display: flex; align-items: center; gap: 2px 4px; padding-top: 4px; padding-bottom: 4px; overflow-x: auto; scrollbar-width: none; }
+  #footer .wrap::-webkit-scrollbar { display: none; }
+  #footer button, #footer a {
+    font: 13px/1.3 var(--mono); background: none; border: 0; color: var(--fg);
+    padding: 4px 6px; cursor: pointer; white-space: nowrap; text-decoration: none;
+  }
+  #footer kbd { font: inherit; font-weight: 700; color: var(--key); margin-right: 5px; }
+  #footer button:hover, #footer button:focus-visible, #footer a:hover, #footer a:focus-visible {
+    background: var(--cursor-bg); color: var(--cursor-fg); outline: none;
+  }
+  #footer button:hover kbd, #footer button:focus-visible kbd, #footer a:hover kbd, #footer a:focus-visible kbd { color: var(--cursor-fg); }
+  #footer .spacer { flex: 1; }
+  #footer .chrome { color: var(--muted); }
+
+  /* ================================================================ hero == */
+  .hero { display: grid; grid-template-columns: 1fr 236px; gap: 32px; align-items: center; padding: 36px 0 20px; }
+  .hero h1 { font-size: 42px; line-height: 1.05; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .hero .role { font: 14px/1.4 var(--mono); color: var(--muted); margin: 0 0 18px; }
+  .hero p { margin: 0 0 12px; }
+
+  /* a De Stijl composition with the portrait as one of its blocks */
+  .comp {
+    display: grid; gap: var(--gutter); padding: var(--gutter); background: var(--rule);
+    grid-template-columns: 1fr 1fr 34px; grid-template-rows: 40px 1fr 1fr 30px;
+    aspect-ratio: 236 / 290;
+  }
+  .comp > * { background: var(--panel); }
+  .comp .photo { grid-column: 1 / 3; grid-row: 2 / 4; overflow: hidden; }
+  .comp .photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: var(--img-filter); }
+  .comp .r { background: var(--red); grid-column: 1 / 2; grid-row: 1; }
+  .comp .y { background: var(--yellow); grid-column: 3; grid-row: 3 / 5; }
+  .comp .b { background: var(--blue); grid-column: 2 / 3; grid-row: 4; }
+  [data-theme="dinn"] .comp .r { background: var(--panel) var(--n-d8); background-size: 8px; }
+  [data-theme="dinn"] .comp .y { background: var(--panel) var(--n-d4); background-size: 8px; }
+  [data-theme="dinn"] .comp .b { background: var(--fg); }
+
+  .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .links a {
+    font: 13px/1.3 var(--mono); color: var(--fg); background: var(--panel);
+    border: var(--rule-w) solid var(--rule); padding: 6px 10px;
+  }
+  .links a:hover, .links a:focus-visible { background: var(--cursor-bg); color: var(--cursor-fg); text-decoration: none; outline: none; }
+  .links a.primary { background: var(--blue); color: var(--on-fill); }
+  .links a.primary:hover { background: var(--cursor-bg); color: var(--cursor-fg); }
+
+  /* ============================================================ sections == */
+  section { padding: 30px 0 6px; scroll-margin-top: 54px; }
+  h2 {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 22px; margin: 0 0 14px; padding-bottom: 6px; border-bottom: var(--rule-w) solid var(--rule);
+  }
+  h2::before { content: ""; width: 14px; height: 14px; background: var(--c, var(--red)); flex: none; }
+  #publications h2 { --c: var(--red); }
+  #experience h2 { --c: var(--blue); }
+  #projects h2 { --c: var(--yellow); }
+  #awards h2 { --c: var(--red); }
+  #teaching h2 { --c: var(--blue); }
+  [data-theme="dinn"] h2::before { background: var(--panel) var(--n-d8); background-size: 8px; outline: 2px solid var(--fg); outline-offset: -2px; }
+  h3.sub { font: 700 13px/1.3 var(--mono); text-transform: uppercase; letter-spacing: .06em; margin: 22px 0 4px; color: var(--muted); }
+
+  /* rows take the paperqueue cursor on hover */
+  .pub, .entry, .list li { transition: background-color .12s; }
+  .pub:hover, .entry:hover, .list li:hover { background: color-mix(in srgb, var(--cursor-bg) 22%, transparent); }
+  [data-theme="dinn"] .pub:hover, [data-theme="dinn"] .entry:hover, [data-theme="dinn"] .list li:hover { background: var(--panel); }
+
+  .pub { display: grid; grid-template-columns: 196px 1fr; gap: 18px; padding: 14px 8px; margin: 0 -8px; border-bottom: 1px solid color-mix(in srgb, var(--rule) 25%, transparent); }
+  .pub:last-child { border-bottom: 0; }
+  .pub img { width: 196px; height: 128px; object-fit: cover; display: block; border: var(--rule-w) solid var(--rule); background: #fff; filter: var(--img-filter); }
+  .pub .title { font-weight: 700; line-height: 1.35; }
+  .pub .authors { font-size: 14px; color: var(--muted); margin: 3px 0; }
+  .pub .authors .me { color: var(--fg); font-weight: 700; }
+  .pub .venue { font: 12.5px/1.4 var(--mono); }
+  .pub .note { font-size: 14.5px; margin: 6px 0 0; }
+  .pub.text { grid-template-columns: 1fr; }
+  .badges { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .badge { font: 12px/1.3 var(--mono); border: 2px solid var(--rule); padding: 2px 7px; color: var(--fg); background: var(--panel); }
+  a.badge:hover, a.badge:focus-visible { background: var(--cursor-bg); color: var(--cursor-fg); text-decoration: none; outline: none; }
+  .award { font: 700 12px/1.3 var(--mono); padding: 4px 8px; background: var(--red); color: var(--on-fill); }
+  [data-theme="dinn"] .award { background: var(--fg); }
+
+  .entry { display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; padding: 12px 8px; margin: 0 -8px; border-bottom: 1px solid color-mix(in srgb, var(--rule) 25%, transparent); }
+  .entry:last-child { border-bottom: 0; }
+  .entry .logo { width: 44px; height: 44px; border: var(--rule-w) solid var(--rule); background: #fff; display: grid; place-items: center; overflow: hidden; }
+  .entry .logo img { width: 30px; height: 30px; object-fit: contain; filter: var(--img-filter); }
+  .entry h3 { margin: 0; font-size: 16px; }
+  .entry .org { color: var(--muted); font-size: 14px; }
+  .entry .when, .list .when { font: 12.5px/1.6 var(--mono); color: var(--muted); text-align: right; white-space: nowrap; }
+  .entry ul { margin: 6px 0 0; padding-left: 18px; font-size: 15px; }
+  .entry li { margin: 2px 0; }
+  .entry li::marker { content: "▪  "; color: var(--red); }
+  [data-theme="dinn"] .entry li::marker { color: var(--fg); }
+
+  /* projects: a strip of Mondrian blocks */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--gutter); padding: var(--gutter); background: var(--rule); }
+  .card { background: var(--panel); padding: 0 14px 14px; display: flex; flex-direction: column; }
+  .card::before { content: ""; display: block; height: 14px; margin: 0 -14px 12px; background: var(--c); }
+  .card:nth-child(1) { --c: var(--red); }
+  .card:nth-child(2) { --c: var(--blue); }
+  .card:nth-child(3) { --c: var(--yellow); }
+  [data-theme="dinn"] .card::before { background: var(--panel) var(--n-d4); background-size: 8px; border-bottom: 2px solid var(--fg); }
+  .card h3 { margin: 0 0 4px; font-size: 16px; }
+  .card p { margin: 0; font-size: 14.5px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 10px; }
+  .tag { font: 12px/1.3 var(--mono); color: var(--muted); }
+  .tag::before { content: "#"; color: var(--key); }
+
+  .list { list-style: none; padding: 0; margin: 0; }
+  .list li { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 9px 8px; margin: 0 -8px; border-bottom: 1px solid color-mix(in srgb, var(--rule) 25%, transparent); }
+  .list li:last-child { border-bottom: 0; }
+  .list .sub { display: block; font-size: 14px; color: var(--muted); }
+
+  .colophon { font: 12px/1.5 var(--mono); color: var(--muted); padding: 28px 0 8px; }
+
+  /* ===================================================== small / touch == */
+  @media (max-width: 640px) {
+    .hero { grid-template-columns: 1fr; gap: 18px; padding-top: 22px; }
+    .comp { width: 190px; order: -1; }
+    .hero h1 { font-size: 34px; }
+    .pub { grid-template-columns: 1fr; gap: 10px; }
+    .pub img { width: 100%; height: 180px; }
+    .entry { grid-template-columns: 44px 1fr; }
+    .entry .when { grid-column: 2; text-align: left; }
+    #header .sub { display: none; }
+  }
+  @media (pointer: coarse) {
+    #footer button, #footer a { padding: 12px 10px; min-height: 44px; }
+    #footer .hint { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div class="wrap">
+    <span class="mark" aria-hidden="true"></span>
+    <b>paolo rabino</b>
+    <span class="sub">research lead · 3D perception &amp; robot learning</span>
+  </div>
+</div>
+
+<main class="wrap" id="top">
+
+<header class="hero">
+  <div>
+    <h1>Paolo Rabino</h1>
+    <p class="role">Research Lead @ <a href="https://mkind.ai">mkind</a> · PhD in AI @ Politecnico di Torino</p>
+    <p>I build learning methods that take robots from understanding 3D scenes to acting on them in real factories: detecting novel and anomalous objects, reasoning about cluttered piles, generating long-horizon motion for surface finishing, and grasping with multiple grippers.</p>
+    <p>I did my PhD in the <a href="https://vandal.polito.it">VANDAL Lab</a> at Politecnico di Torino and IIT, advised by Prof. Tatiana Tommasi. Today I lead research on Physical AI for industrial surface finishing at mkind in Munich.</p>
+    <div class="links">
+      <a class="primary" href="assets/CV_Paolo_Rabino.pdf">CV (PDF)</a>
+      <a href="mailto:paolo.srabino@gmail.com">Email</a>
+      <a href="https://scholar.google.com/citations?user=8cuwiyAAAAAJ">Scholar</a>
+      <a href="https://github.com/paolotron">GitHub</a>
+      <a href="https://www.linkedin.com/in/paolo-rabino-072644201">LinkedIn</a>
+      <a href="https://orcid.org/0009-0001-2843-0614">ORCID</a>
+    </div>
+  </div>
+  <div class="comp" aria-hidden="false">
+    <span class="r"></span>
+    <span></span>
+    <span></span>
+    <div class="photo"><img src="assets/img/paolo.jpg" alt="Portrait of Paolo Rabino"></div>
+    <span></span>
+    <span class="y"></span>
+    <span></span>
+    <span class="b"></span>
+  </div>
+</header>
+
+<section id="publications">
+  <h2>Publications</h2>
+
+  <div class="pub">
+    <img src="assets/img/multigraspnet.jpg" alt="Parallel-jaw and vacuum grasp predictions on a cluttered scene">
+    <div>
+      <div class="title">MultiGraspNet: A Multitask 3D Vision Model for Multi-Gripper Robotic Grasping</div>
+      <div class="authors">S. Ortuno Chanelo, <span class="me">P. Rabino</span>, E. Civitelli, T. Tommasi, R. Camoriano</div>
+      <div class="venue">IEEE Robotics and Automation Letters (RA-L), 2026</div>
+      <p class="note">One point-cloud model predicts parallel-jaw and vacuum grasps from a shared representation, raising grasp success in real industrial trials.</p>
+      <div class="badges"><a class="badge" href="https://arxiv.org/abs/2602.06504">arXiv</a><span class="award">Best Poster Award · IROS 2026 workshop</span></div>
+    </div>
+  </div>
+
+  <div class="pub">
+    <img src="assets/img/foldpath.jpg" alt="Spray-painting paths generated around a container">
+    <div>
+      <div class="title">FoldPath: End-to-End Object-Centric Motion Generation via Modulated Implicit Paths</div>
+      <div class="authors"><span class="me">P. Rabino</span>, G. Tiboni, T. Tommasi</div>
+      <div class="venue">IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2025</div>
+      <p class="note">The first end-to-end model that generates multiple long-horizon robot paths as continuous neural fields, with no post-processing. State of the art on robotic spray painting; patent pending.</p>
+      <div class="badges"><a class="badge" href="https://arxiv.org/abs/2511.01407">arXiv</a></div>
+    </div>
+  </div>
+
+  <div class="pub">
+    <img src="assets/img/odd.jpg" alt="Odd-one-out detection across views of a multi-object scene">
+    <div>
+      <div class="title">Efficient Odd-One-Out Anomaly Detection</div>
+      <div class="authors">S. Chito, <span class="me">P. Rabino</span>, T. Tommasi</div>
+      <div class="venue">International Conference on Image Analysis and Processing (ICIAP), 2025</div>
+      <p class="note">Finds the anomalous object in a multi-view scene with about a third fewer parameters and roughly 3× faster training than the previous state of the art.</p>
+      <div class="badges"><a class="badge" href="https://arxiv.org/abs/2509.04326">arXiv</a></div>
+    </div>
+  </div>
+
+  <div class="pub">
+    <img src="assets/img/d3g.jpg" alt="Detected objects in a bin and the order in which to grasp them">
+    <div>
+      <div class="title">A Modern Take on Visual Relationship Reasoning for Grasp Planning</div>
+      <div class="authors"><span class="me">P. Rabino</span>, T. Tommasi</div>
+      <div class="venue">IEEE Robotics and Automation Letters (RA-L), 2025, presented at IROS</div>
+      <p class="note">D3G detects objects and predicts the dependency graph that sets their grasp order in dense clutter. Its benchmark metric was adopted by UNOBench and the ECCV 2026 challenge.</p>
+      <div class="badges"><a class="badge" href="https://arxiv.org/abs/2409.02035">arXiv</a><a class="badge" href="https://github.com/paolotron/D3G">Code</a><a class="badge" href="https://paolotron.github.io/d3g.github.io/">Project page</a></div>
+    </div>
+  </div>
+
+  <div class="pub">
+    <img src="assets/img/3dsend.jpg" alt="Point cloud colored by patch-level novelty scores">
+    <div>
+      <div class="title">3D Semantic Novelty Detection via Large-Scale Pre-Trained Models</div>
+      <div class="authors"><span class="me">P. Rabino</span>, A. Alliegro, T. Tommasi</div>
+      <div class="venue">IEEE Access, vol. 12, 2024</div>
+      <p class="note">3D-SeND tells known from unknown objects using frozen pre-trained 3D encoders, with no training and only a few reference samples per class. An earlier version appeared at the ECCV 2024 workshops.</p>
+      <div class="badges"><a class="badge" href="https://doi.org/10.1109/ACCESS.2024.3464334">Paper</a><a class="badge" href="https://github.com/paolotron/3DSend">Code</a><a class="badge" href="https://paolotron.github.io/3DSend.github.io">Project page</a></div>
+    </div>
+  </div>
+
+  <div class="pub text">
+    <div>
+      <div class="title">QuadricViT: Efficient 3D Semantic Occupancy Prediction</div>
+      <div class="authors">S. Chito*, <span class="me">P. Rabino*</span>, R. Camoriano, T. Tommasi &nbsp;(*equal contribution)</div>
+      <div class="venue">Under submission, 2026</div>
+    </div>
+  </div>
+
+  <h3 class="sub">Patent</h3>
+  <div class="pub text">
+    <div>
+      <div class="title">Metodo per imparare la generazione del percorso motorio di robot (Robotic Path Generator from Point Clouds)</div>
+      <div class="authors"><span class="me">P. Rabino</span>, G. Tiboni, T. Tommasi</div>
+      <div class="venue">National and international patent application, Politecnico di Torino, 2025</div>
+      <div class="badges"><a class="badge" href="https://www.knowledge-share.eu/en/patents/robotic-path-generator-from-point-clouds/">Knowledge Share</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <h2>Experience</h2>
+
+  <div class="entry">
+    <div class="logo"><img src="assets/img/mkind.png" alt="mkind logo"></div>
+    <div>
+      <h3>Research Lead</h3>
+      <div class="org"><a href="https://mkind.ai">mkind</a> · Munich</div>
+      <ul>
+        <li>Lead research on Physical AI for surface finishing in high-mix industrial manufacturing.</li>
+        <li>Develop trajectory generation models building on FoldPath, and learn paint deposition from 3D recordings of expert operators.</li>
+        <li>Lead applicant for EuroHPC AI Factory GPU allocations, including a granted 50,000 GPU-hour project.</li>
+      </ul>
+    </div>
+    <div class="when">2026 – now</div>
+  </div>
+
+  <div class="entry">
+    <div class="logo"><img src="assets/img/phd-ai.png" alt="National PhD in AI logo"></div>
+    <div>
+      <h3>National PhD in Artificial Intelligence</h3>
+      <div class="org">Politecnico di Torino &amp; IIT, VANDAL Lab · Turin</div>
+      <ul>
+        <li>Thesis: <i>From 3D Understanding to Action: Learning Methods for Industrial Robotics</i>, supervised by Prof. Tatiana Tommasi and co-supervised by Prof. Giuseppe Bruno Averta.</li>
+        <li>Industry collaborations on robotic spray painting and multi-gripper bin picking; collaborator in the European <a href="https://www.chistera.eu/projects/burg">BURG project</a>.</li>
+      </ul>
+    </div>
+    <div class="when">2022 – 2026</div>
+  </div>
+
+  <div class="entry">
+    <div class="logo"><img src="assets/img/motionness.png" alt="Motionness logo"></div>
+    <div>
+      <h3>Co-Founder</h3>
+      <div class="org">Motionness.ai / AnyPath · Turin</div>
+      <ul>
+        <li>Co-founded an AI startup for robotic path planning from point clouds, later continued as AnyPath.</li>
+        <li>Built the full MLOps pipeline and full-stack product for learned robotic path generation.</li>
+      </ul>
+    </div>
+    <div class="when">2025 – 2026</div>
+  </div>
+
+  <div class="entry">
+    <div class="logo"><img src="assets/img/polito.png" alt="Politecnico di Torino logo"></div>
+    <div>
+      <h3>MSc in Computer Engineering, cum laude</h3>
+      <div class="org">Politecnico di Torino · Thesis: Deep Learning for Robotic Grasping</div>
+    </div>
+    <div class="when">2021 – 2022</div>
+  </div>
+
+  <div class="entry">
+    <div class="logo"><img src="assets/img/polito.png" alt="Politecnico di Torino logo"></div>
+    <div>
+      <h3>BSc in Computer Engineering</h3>
+      <div class="org">Politecnico di Torino</div>
+    </div>
+    <div class="when">2019 – 2021</div>
+  </div>
+</section>
+
+<section id="projects">
+  <h2>Projects</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>QuadricViT kernels</h3>
+      <p>Custom CUDA kernels that aggregate superquadric primitives into a voxel occupancy grid, reformulated in log space to remove the numerical instabilities of the original implementation.</p>
+      <div class="tags"><span class="tag">cuda</span><span class="tag">pytorch-ext</span></div>
+    </div>
+    <div class="card">
+      <h3><a href="https://github.com/mspronesti/baylib">baylib</a></h3>
+      <p>C++ library for approximate inference on Bayesian networks. I co-developed the GPU backend: CUDA kernels for logic sampling and likelihood weighting, and OpenCL implementations with a CPU fallback.</p>
+      <div class="tags"><span class="tag">cuda</span><span class="tag">opencl</span><span class="tag">c++20</span></div>
+    </div>
+    <div class="card">
+      <h3><a href="https://github.com/paolotron/BlokusRL">BlokusRL</a></h3>
+      <p>Custom simulator and environment for the board game Blokus, used to train reinforcement-learning agents.</p>
+      <div class="tags"><span class="tag">python</span><span class="tag">rl</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="awards">
+  <h2>Awards &amp; Grants</h2>
+  <ul class="list">
+    <li><span><b>Best Poster Presentation Award</b>, for MultiGraspNet<span class="sub">1st Int. Workshop on Industrial Applications of Robot Learning at IEEE/RSJ IROS 2026, Pittsburgh</span></span><span class="when">2026</span></li>
+    <li><span><b>Meta Project Aria research grant</b><span class="sub">Wrote the winning proposal to collect an egocentric dataset of interactions with deformable objects; awarded Project Aria glasses</span></span><span class="when">2026</span></li>
+    <li><span><b>Competitive HPC compute grants</b>, over 100,000 GPU hours<span class="sub">PI of 3 projects (2 EuroHPC AI Factory, 1 CINECA ISCRA) and collaborator on 5 CINECA ISCRA projects, on CINECA Leonardo and BSC MareNostrum 5</span></span><span class="when">2023 – 2026</span></li>
+    <li><span><b>Board of Directors</b>, IEEE-HKN honor society<span class="sub">Selected for academic performance; co-managed a non-profit with more than 50 members</span></span><span class="when">2021 – 2022</span></li>
+  </ul>
+</section>
+
+<section id="teaching">
+  <h2>Teaching &amp; Service</h2>
+  <ul class="list">
+    <li><span><b>Teaching assistant</b>, Politecnico di Torino<span class="sub">Advanced Machine Learning · Machine Learning and Deep Learning · Data Analysis and Artificial Intelligence · Algorithms and Data Structures · Models for AI (2nd-level Master in AI)</span></span><span class="when">2022 – 2026</span></li>
+    <li><span><b>MSc thesis co-supervision</b><span class="sub">S. Chito (odd-one-out anomaly detection, led to an ICIAP paper) · A. Re (multimodal LLMs for anomaly detection) · G. A. Corteletti Tapias (point cloud registration) · S. Behnam Sharbafan (learned gripper selection)</span></span><span class="when">2025 – 2026</span></li>
+    <li><span><b>Reviewer</b><span class="sub">Conferences: CVPR, ICCV, ECCV, AAAI, ICRA, IROS, ICIAP · Journals: TPAMI, T-RO, RA-L, IJRR</span></span><span class="when"></span></li>
+  </ul>
+</section>
+
+<p class="colophon">© 2026 Paolo Rabino · palettes borrowed from <a href="https://github.com/paolotron/paperqueue">paperqueue</a></p>
+
+</main>
+
+<div id="footer">
+  <div class="wrap">
+    <a href="#publications" data-key="p"><kbd>p</kbd>Publications</a>
+    <a href="#experience" data-key="e"><kbd>e</kbd>Experience</a>
+    <a href="#projects" data-key="j"><kbd>j</kbd>Projects</a>
+    <a href="#awards" data-key="a"><kbd>a</kbd>Awards</a>
+    <a href="#teaching" data-key="s"><kbd>s</kbd>Service</a>
+    <a href="assets/CV_Paolo_Rabino.pdf" data-key="c"><kbd>c</kbd>CV</a>
+    <span class="spacer"></span>
+    <button id="palette" class="chrome" data-key="t" type="button"><kbd>t</kbd><span id="paletteName">palette: destijl</span></button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var THEMES = ["destijl", "graph", "dinn", "dark", "system"];
+  var root = document.documentElement;
+  var label = document.getElementById("paletteName");
+  var meta = document.getElementById("themeColor");
+  var coarse = matchMedia("(pointer: coarse)");
+
+  function setTheme(name) {
+    if (THEMES.indexOf(name) < 0) name = "destijl";
+    root.dataset.theme = name;
+    label.textContent = (coarse.matches ? "◐ " : "palette: ") + name;
+    meta.content = getComputedStyle(document.body).backgroundColor;
+    try { localStorage.setItem("site.theme", name); } catch (e) {}
+  }
+  function cycle() { setTheme(THEMES[(THEMES.indexOf(root.dataset.theme) + 1) % THEMES.length]); }
+
+  setTheme(root.dataset.theme);
+  document.getElementById("palette").addEventListener("click", cycle);
+
+  // single-key shortcuts, as in the paperqueue TUI
+  document.addEventListener("keydown", function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+    var t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    var el = document.querySelector('#footer [data-key="' + e.key + '"]');
+    if (!el) return;
+    e.preventDefault();
+    el.click();
+  });
+})();
+</script>
+</body>
+</html>
